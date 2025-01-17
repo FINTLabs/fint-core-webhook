@@ -15,6 +15,17 @@ java {
 	}
 }
 
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+		}
+	}
+	repositories {
+		mavenLocal()
+	}
+}
+
 repositories {
 	mavenCentral()
 }
@@ -45,13 +56,4 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from components.java
-		}
-	}
-	repositories {
-		mavenLocal()
-	}
-}
+apply from: 'https://raw.githubusercontent.com/FINTLabs/fint-buildscripts/master/reposilite.ga.gradle'
