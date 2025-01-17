@@ -23,7 +23,7 @@ The project is split into two parts:
 1. Annotate your Application with @WebHookClient
 2. Create a bean of WebHookClientService with the specified type that should be processed.
 
-
+```kotlin
     @Bean
     fun webHookClientService(objectMapper: ObjectMapper): WebhookClientService<Test> {
         return WebhookClientService(Test::class.java, this::test, objectMapper)
@@ -32,15 +32,15 @@ The project is split into two parts:
     fun test(test: Test) {
         // handle test
     }
-
+```
 }
 ## Webhook Server usage
 1. Annotate your Application with @WebHookServer
 2. Dependency Inject WebHookServerService and call callback
 
+```kotlin
 
     fun test() {
         webHookServerService.callback(Testt("OK", "BINGO"))
     }
-
-}
+```
