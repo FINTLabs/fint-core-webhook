@@ -47,12 +47,8 @@ tasks.named('test') {
 
 publishing {
 	publications {
-		maven(MavenPublication) {
+		mavenJava(MavenPublication) {
 			from components.java
-
-			groupId    = project.group
-			artifactId = 'fint-core-webhook'
-			version    = project.version
 		}
 	}
 	repositories {
