@@ -7,4 +7,4 @@ package no.fintlabs.webhook.server.annotation
 @MustBeDocumented
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class WebHookServer()
+annotation class WebhookServer()
