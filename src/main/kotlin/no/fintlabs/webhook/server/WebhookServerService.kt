@@ -1,35 +1,36 @@
 package no.fintlabs.webhook.server
 
-import no.fintlabs.webhook.server.annotation.WebHookServer
+import no.fintlabs.webhook.server.annotation.WebhookServer
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 
 @Service
-@ConditionalOnBean(annotation = [WebHookServer::class])
-class WebHookServerService(private val webHookCache: WebHookCache) {
+@ConditionalOnBean(annotation = [WebhookServer::class])
+class WebhookServerService(
+    private val webHookCache: WebhookCache
+) {
 
     private val logger = LoggerFactory.getLogger(this::class.java)
     private val webClient: WebClient = WebClient.create()
 
-    fun callback(any: Any) {
-        webHookCache.callbacks.forEach { callback ->
+    fun callback(eventName: String, payload: Any) =
+        webHookCache.getCallbacks(eventName).forEach { callback ->
             webClient.post()
-                .uri("$callback/event")
-                .bodyValue(any)
+                .uri("$callback/event/$eventName")
+                .bodyValue(payload)
                 .retrieve()
                 .toBodilessEntity()
                 .subscribe(
                     {
-                        logger.debug("Successuly sent payload to: $callback")
+                        logger.info("Successuly sent payload to: $callback")
                     },
                     {
                         logger.warn("Failed to send payload, detaching callback: $callback")
-                        webHookCache.removeCallback(callback)
+                        webHookCache.removeCallback(eventName, callback)
                     }
                 )
         }
-    }
 
 }
