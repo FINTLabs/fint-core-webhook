@@ -1,6 +1,6 @@
 package no.fintlabs.webhook.server
 
-import no.fintlabs.webhook.client.model.ClientRequest
+import no.fintlabs.webhook.model.ClientRequest
 import no.fintlabs.webhook.server.annotation.WebhookServer
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
