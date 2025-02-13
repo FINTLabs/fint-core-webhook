@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono
 @ConditionalOnBean(annotation = [WebhookClient::class])
 class WebhookClientHealthChecker(
     properties: WebhookClientProperties,
-    @Qualifier("webHookClient") private val webClient: WebClient,
+    @Qualifier("webhookClient") private val webhookClient: WebClient,
     private val handlerRegistry: WebhookHandlerRegistry,
     private val webHookClientRegistration: WebhookClientRegistrationService
 ) {
@@ -28,7 +28,7 @@ class WebhookClientHealthChecker(
             callbacks.forEach { callback ->
                 logger.info("Performing health check at: $healthUrl with callbacks: $callbacks")
 
-                webClient.post()
+                webhookClient.post()
                     .uri(healthUrl)
                     .bodyValue(callbacks)
                     .exchangeToMono { Mono.just(it.statusCode()) }
