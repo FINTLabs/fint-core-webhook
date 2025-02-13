@@ -1,6 +1,9 @@
 package no.fintlabs.webhook.client.annotation
 
 interface WebhookEventHandler<T> {
+    /** The event name we subscribe to. */
+    val eventName: String
+
     /** The class of the event payload so we can deserialize JSON. */
     val eventType: Class<T>
 
