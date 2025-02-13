@@ -25,24 +25,26 @@ class WebhookClientHealthChecker(
     @Scheduled(initialDelay = 10000L, fixedDelay = 30000L)
     private fun healthCheck() =
         handlerRegistry.getCallbacks().let { callbacks ->
-            logger.info("Performing health check at: $healthUrl with callbacks: $callbacks")
+            callbacks.forEach { callback ->
+                logger.info("Performing health check at: $healthUrl with callbacks: $callbacks")
 
-            webClient.post()
-                .uri(healthUrl)
-                .bodyValue(callbacks)
-                .exchangeToMono { Mono.just(it.statusCode()) }
-                .subscribe(
-                    { status ->
-                        if (status.is2xxSuccessful) logger.info("Health check successful")
-                        else {
-                            logger.warn("Health check encountered an error with status code: $status")
-                            webHookClientRegistration.register()
+                webClient.post()
+                    .uri(healthUrl)
+                    .bodyValue(callbacks)
+                    .exchangeToMono { Mono.just(it.statusCode()) }
+                    .subscribe(
+                        { status ->
+                            if (status.is2xxSuccessful) logger.info("Health check successful")
+                            else {
+                                logger.warn("Health check encountered an error with status code: $status")
+                                webHookClientRegistration.register(callback.key, callback.value)
+                            }
+                        },
+                        { error ->
+                            logger.error("Health check encountered an error: ${error.message}")
+                            webHookClientRegistration.register(callback.key, callback.value)
                         }
-                    },
-                    { error ->
-                        logger.error("Health check encountered an error: ${error.message}")
-                        webHookClientRegistration.register()
-                    }
-                )
+                    )
+            }
         }
 }
