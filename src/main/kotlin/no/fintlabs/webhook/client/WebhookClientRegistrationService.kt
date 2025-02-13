@@ -30,10 +30,10 @@ class WebhookClientRegistrationService(
             .exchangeToMono { Mono.just(it.statusCode()) }
             .subscribe(
                 {
-                    logger.info("Webhook registered successfully!")
+                    logger.info("Webhook unregistered successfully!")
                 },
                 { error ->
-                    logger.warn("Webhook registration failed: Server is likely down. Error: ${error.message}")
+                    logger.warn("Webhook unregistering failed: Server is likely down. Error: ${error.message}")
                 }
             )
 
