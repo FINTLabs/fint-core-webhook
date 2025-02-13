@@ -1,6 +1,5 @@
 package no.fintlabs.webhook.client
 
-import jakarta.annotation.PostConstruct
 import no.fintlabs.webhook.client.annotation.WebhookClient
 import no.fintlabs.webhook.client.config.WebhookClientProperties
 import org.slf4j.LoggerFactory
@@ -29,12 +28,8 @@ class WebhookClientRegistrationService(
             .bodyValue(handlerRegistry.getCallbacks())
             .exchangeToMono { Mono.just(it.statusCode()) }
             .subscribe(
-                {
-                    logger.info("Webhook unregistered successfully!")
-                },
-                { error ->
-                    logger.warn("Webhook unregistering failed: Server is likely down. Error: ${error.message}")
-                }
+                { logger.info("Webhook unregistered successfully!") },
+                { error -> logger.warn("Webhook unregistering failed: Server is likely down. Error: ${error.message}") }
             )
 
     fun register(clazzName: String, callbacks: Collection<String>, url: String = registerUrl) =
@@ -43,12 +38,8 @@ class WebhookClientRegistrationService(
             .bodyValue(handlerRegistry.getCallbacks())
             .exchangeToMono { Mono.just(it.statusCode()) }
             .subscribe(
-                {
-                    logger.info("Webhook registered successfully!")
-                },
-                { error ->
-                    logger.warn("Webhook registration failed: Server is likely down. Error: ${error.message}")
-                }
+                { logger.info("Webhook registered successfully!") },
+                { error -> logger.warn("Webhook registration failed: Server is likely down. Error: ${error.message}") }
             )
 
 }
