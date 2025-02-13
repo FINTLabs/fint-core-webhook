@@ -13,13 +13,6 @@ class WebhookEventDispatcherService(
 
     private val logger = LoggerFactory.getLogger(this::class.java)
 
-    /**
-     * Dispatches the event based on its type.
-     *
-     * @param eventName the unique identifier for the event type.
-     * @param payload the JSON payload as a String.
-     * @return true if the event was successfully processed, false otherwise.
-     */
     fun dispatchEvent(eventName: String, payload: String): Boolean =
         handlerRegistry.getHandler(eventName)?.let { handler ->
             try {
