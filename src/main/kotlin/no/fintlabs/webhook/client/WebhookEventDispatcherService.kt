@@ -1,11 +1,14 @@
 package no.fintlabs.webhook.client
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import no.fintlabs.webhook.client.annotation.WebhookClient
 import no.fintlabs.webhook.client.annotation.WebhookEventHandler
 import org.slf4j.LoggerFactory
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.stereotype.Service
 
 @Service
+@ConditionalOnBean(annotation = [WebhookClient::class])
 class WebhookEventDispatcherService(
     private val handlerRegistry: WebhookHandlerRegistry,
     private val objectMapper: ObjectMapper
