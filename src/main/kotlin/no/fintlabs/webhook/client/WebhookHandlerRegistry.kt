@@ -2,8 +2,8 @@ package no.fintlabs.webhook.client
 
 import no.fintlabs.webhook.client.annotation.WebhookClient
 import no.fintlabs.webhook.client.annotation.WebhookEventHandler
+import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
-import org.springframework.stereotype.Component
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -13,43 +13,34 @@ class WebhookHandlerRegistry(
     handlers: List<WebhookEventHandler<*>>
 ) {
 
+    private val logger = LoggerFactory.getLogger(this::class.java)
+
     private val handlerMap: MutableMap<String, WebhookEventHandler<*>> =
         handlers.associateBy { it.eventType.name }.toMutableMap()
 
     fun getCallbacks(): Map<String, Set<String>> =
         handlerMap.mapValues { (_, handler) -> handler.callbacks.toSet() }
 
-    fun removeHandler(clazzName: String) =
-        handlerMap.remove(clazzName)
+    fun removeHandler(eventName: String) =
+        handlerMap.remove(eventName)
             ?.callbacks
             ?.toSet()
-            ?.also { webHookClientRegistrationService.unregister(clazzName, it) }
+            ?.also { webHookClientRegistrationService.unregister(eventName, it) }
 
-    fun removeCallbacks(clazzName: String, callbacks: Collection<String>) =
-        handlerMap[clazzName]?.let { handler ->
+    fun removeCallbacks(eventName: String, callbacks: Collection<String>) =
+        handlerMap[eventName]?.let { handler ->
             val callbacksSet = callbacks.toSet()
             handler.callbacks.removeAll(callbacksSet)
-            webHookClientRegistrationService.unregister(clazzName, callbacksSet)
+            webHookClientRegistrationService.unregister(eventName, callbacksSet)
         }
 
-    fun addCallbacks(clazzName: String, callbacks: Collection<String>) =
-        handlerMap[clazzName]?.let { handler ->
+    fun addCallbacks(eventName: String, callbacks: Collection<String>) =
+        handlerMap[eventName]?.let { handler ->
             handler.callbacks.addAll(callbacks)
-            webHookClientRegistrationService.register(clazzName, callbacks)
-        }
-
-    fun removeHandler(clazz: Class<*>) = removeHandler(clazz.name)
+            webHookClientRegistrationService.register(eventName, callbacks)
+        } ?: run { logger.info("No handler found for event: $eventName") }
 
     fun getAllHandlers(): Collection<WebhookEventHandler<*>> = handlerMap.values
 
-    fun getHandler(clazz: Class<*>): WebhookEventHandler<*>? = handlerMap[clazz.name]
-
-    fun getHandler(clazzName: String): WebhookEventHandler<*>? = handlerMap[clazzName]
-
-    fun addCallbacks(clazz: Class<*>, callbacks: Collection<String>) = addCallbacks(clazz.name, callbacks)
-    fun removeCallbacks(clazz: Class<*>, callbacks: Collection<String>) = removeCallbacks(clazz.name, callbacks)
-    fun removeCallback(clazzName: String, callback: String) = removeCallbacks(clazzName, setOf(callback))
-    fun removeCallback(clazz: Class<*>, callback: String) = removeCallback(clazz.name, callback)
-    fun addCallback(clazzName: String, callback: String) = addCallbacks(clazzName, setOf(callback))
-    fun addCallback(clazz: Class<*>, callback: String) = addCallback(clazz.name, callback)
+    fun getHandler(eventName: String): WebhookEventHandler<*>? = handlerMap[eventName]
 }
