@@ -16,10 +16,10 @@ class WebhookEventDispatcherService(
 
     private val logger = LoggerFactory.getLogger(this::class.java)
 
-    fun dispatchEvent(eventName: String, payload: String): Boolean =
+    fun dispatchEvent(eventName: String, payload: Any): Boolean =
         handlerRegistry.getHandler(eventName)?.let { handler ->
             try {
-                val event = objectMapper.readValue(payload, handler.eventType)
+                val event = objectMapper.convertValue(payload, handler.eventType)
                 @Suppress("UNCHECKED_CAST")
                 (handler as WebhookEventHandler<Any>).handleEvent(event!!)
                 true
