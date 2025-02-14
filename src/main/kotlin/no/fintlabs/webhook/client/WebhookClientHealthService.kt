@@ -2,6 +2,7 @@ package no.fintlabs.webhook.client
 
 import no.fintlabs.webhook.client.annotation.WebhookClient
 import no.fintlabs.webhook.client.config.WebhookClientProperties
+import no.fintlabs.webhook.client.handler.WebhookHandlerRegistry
 import no.fintlabs.webhook.model.ClientRequest
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier

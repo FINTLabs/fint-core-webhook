@@ -2,7 +2,8 @@ package no.fintlabs.webhook.client
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import no.fintlabs.webhook.client.annotation.WebhookClient
-import no.fintlabs.webhook.client.annotation.WebhookEventHandler
+import no.fintlabs.webhook.client.handler.WebhookEventHandler
+import no.fintlabs.webhook.client.handler.WebhookHandlerRegistry
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.stereotype.Service

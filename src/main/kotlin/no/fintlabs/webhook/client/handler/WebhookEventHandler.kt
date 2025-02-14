@@ -1,4 +1,4 @@
-package no.fintlabs.webhook.client.annotation
+package no.fintlabs.webhook.client.handler
 
 interface WebhookEventHandler<T> {
     /** The event name we subscribe to. */

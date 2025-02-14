@@ -1,7 +1,7 @@
-package no.fintlabs.webhook.client
+package no.fintlabs.webhook.client.handler
 
+import no.fintlabs.webhook.client.WebhookClientRegistrationService
 import no.fintlabs.webhook.client.annotation.WebhookClient
-import no.fintlabs.webhook.client.annotation.WebhookEventHandler
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.stereotype.Repository
