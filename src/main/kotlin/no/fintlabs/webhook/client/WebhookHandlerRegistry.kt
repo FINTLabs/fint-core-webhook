@@ -38,7 +38,7 @@ class WebhookHandlerRegistry(
         handlerMap[eventName]?.let { handler ->
             handler.callbacks.addAll(callbacks)
             webHookClientRegistrationService.register(eventName, callbacks)
-        } ?: run { logger.info("No handler found for event: $eventName") }
+        } ?: run { logger.warn("No handler found for event: $eventName") }
 
     fun getAllHandlers(): Collection<WebhookEventHandler<*>> = handlerMap.values
 

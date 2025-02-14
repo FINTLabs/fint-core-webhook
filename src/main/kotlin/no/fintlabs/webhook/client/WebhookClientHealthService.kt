@@ -35,7 +35,7 @@ class WebhookClientHealthChecker(
                     .subscribe(
                         { status ->
                             if (status.is2xxSuccessful)
-                                logger.info("Health check was successful!")
+                                logger.debug("Health check was successful!")
                             else handleHealthCheckFailiure(callback.key, callback.value,  "${status.value()}")
                         },
                         { handleHealthCheckFailiure(callback.key, callback.value, it.message) }

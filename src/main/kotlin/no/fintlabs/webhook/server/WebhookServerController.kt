@@ -21,18 +21,17 @@ class WebhookServerController(
 
     @PostMapping("/register")
     fun register(@RequestBody clientRequest: ClientRequest) {
-        logger.info("Registering callback: ${clientRequest.callbacks}")
+        logger.debug("Registering callback: {}", clientRequest.callbacks)
         webHookCache.addCallbacks(clientRequest.callbacks)
-        logger.info("Callbacks: {}", webHookCache.cache)
     }
 
     @PostMapping("/health")
     fun health(@RequestBody clientRequest: ClientRequest): ResponseEntity<Void> {
         if (webHookCache.callbacksExists(clientRequest.callbacks)) {
-            logger.info("Health check passed for callback: ${clientRequest.callbacks}")
+            logger.debug("Health check passed for callback: {}", clientRequest.callbacks)
             return ResponseEntity.ok().build()
         } else {
-            logger.info("Health check failed for callbacks: ${clientRequest.callbacks}")
+            logger.warn("Health check failed for callbacks: ${clientRequest.callbacks}")
             return ResponseEntity.notFound().build()
         }
     }

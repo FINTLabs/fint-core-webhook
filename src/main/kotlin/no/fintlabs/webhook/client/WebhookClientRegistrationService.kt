@@ -28,7 +28,7 @@ class WebhookClientRegistrationService(
             .bodyValue(mapOf(eventName to callbacks))
             .exchangeToMono { Mono.just(it.statusCode()) }
             .subscribe(
-                { logger.info("Webhook unregistered successfully!") },
+                { logger.debug("Webhook unregistered successfully!") },
                 { error -> logger.warn("Webhook unregistering failed: Server is likely down. Error: ${error.message}") }
             )
 
@@ -38,7 +38,7 @@ class WebhookClientRegistrationService(
             .bodyValue(ClientRequest(mapOf(eventName to callbacks.toSet())))
             .exchangeToMono { Mono.just(it.statusCode()) }
             .subscribe(
-                { logger.info("Webhook registered event: $eventName successfully!") },
+                { logger.debug("Webhook registered event: $eventName successfully!") },
                 { error -> logger.warn("Webhook registration failed: Server is likely down. Error: ${error.message}") }
             )
 

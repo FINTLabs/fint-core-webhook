@@ -24,7 +24,7 @@ class WebhookServerService(
                 .toBodilessEntity()
                 .subscribe(
                     {
-                        logger.info("Successuly sent payload to: $callback")
+                        logger.debug("Successuly sent payload to: $callback")
                     },
                     { error ->
                         logger.warn("Failed to send payload, detaching callback: $callback with error: ${error.message}")

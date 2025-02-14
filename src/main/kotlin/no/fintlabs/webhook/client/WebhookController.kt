@@ -18,7 +18,7 @@ class WebhookController(
 
     @PostMapping("/event/{eventName}")
     fun event(@PathVariable eventName: String, @RequestBody payload: Any): ResponseEntity<Unit> {
-        logger.info("Received event of type: $eventName")
+        logger.debug("Received event of type: $eventName")
 
         val success = dispatcherService.dispatchEvent(eventName, payload)
         return if (success) {
