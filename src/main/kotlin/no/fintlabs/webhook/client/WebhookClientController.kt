@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/webhook")
 @ConditionalOnBean(annotation = [WebhookClient::class])
-class WebhookController(
+class WebhookClientController(
     private val dispatcherService: WebhookEventDispatcherService
 ) {
 
