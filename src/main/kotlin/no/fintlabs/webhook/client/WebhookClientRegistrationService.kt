@@ -2,6 +2,7 @@ package no.fintlabs.webhook.client
 
 import no.fintlabs.webhook.client.annotation.WebhookClient
 import no.fintlabs.webhook.client.config.WebhookClientProperties
+import no.fintlabs.webhook.model.ClientRequest
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
@@ -33,11 +34,11 @@ class WebhookClientRegistrationService(
 
     fun register(eventName: String, callbacks: Collection<String>, url: String = registerUrl) =
         webhookClient.post()
-            .uri(unregisterUrl)
-            .bodyValue(mapOf(eventName to callbacks))
+            .uri(url)
+            .bodyValue(ClientRequest(mapOf(eventName to callbacks.toSet())))
             .exchangeToMono { Mono.just(it.statusCode()) }
             .subscribe(
-                { logger.info("Webhook registered successfully!") },
+                { logger.info("Webhook registered event: $eventName successfully!") },
                 { error -> logger.warn("Webhook registration failed: Server is likely down. Error: ${error.message}") }
             )
 
