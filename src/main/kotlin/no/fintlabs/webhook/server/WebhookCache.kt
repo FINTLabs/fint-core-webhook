@@ -21,7 +21,7 @@ class WebhookCache {
         cache.getOrDefault(type, mutableSetOf())
 
     fun callbacksExists(callbacks: Map<String, Collection<String>>) =
-        callbacks.all { cache.contains(it.key) && cache.getOrDefault(it.key, mutableSetOf()).containsAll(it.value) }
+        callbacks.all { cache.containsKey(it.key) && cache.getOrDefault(it.key, mutableSetOf()).containsAll(it.value) }
 
     fun removeCallback(eventName: String, callback: String) =
         cache.getOrDefault(eventName, mutableSetOf()).remove(callback)
