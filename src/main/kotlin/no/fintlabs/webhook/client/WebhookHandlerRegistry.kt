@@ -16,7 +16,7 @@ class WebhookHandlerRegistry(
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     private val handlerMap: MutableMap<String, WebhookEventHandler<*>> =
-        handlers.associateBy { it.eventType.name }.toMutableMap()
+        handlers.associateBy { it.eventName }.toMutableMap()
 
     fun getCallbacks(): Map<String, Set<String>> =
         handlerMap.mapValues { (_, handler) -> handler.callbacks.toSet() }
