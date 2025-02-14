@@ -18,7 +18,7 @@ class WebhookServerService(
     fun callback(eventName: String, payload: Any) =
         webHookCache.getCallbacks(eventName).forEach { callback ->
             webClient.post()
-                .uri("$callback/event/$eventName")
+                .uri("$callback/webhook/event/$eventName")
                 .bodyValue(payload)
                 .retrieve()
                 .toBodilessEntity()
@@ -26,8 +26,8 @@ class WebhookServerService(
                     {
                         logger.info("Successuly sent payload to: $callback")
                     },
-                    {
-                        logger.warn("Failed to send payload, detaching callback: $callback")
+                    { error ->
+                        logger.warn("Failed to send payload, detaching callback: $callback with error: ${error.message}")
                         webHookCache.removeCallback(eventName, callback)
                     }
                 )
