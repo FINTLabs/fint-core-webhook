@@ -27,13 +27,14 @@ class WebhookServerController(
     }
 
     @PostMapping("/health")
-    fun health(@RequestBody clientRequest: ClientRequest): ResponseEntity<Void> =
+    fun health(@RequestBody clientRequest: ClientRequest): ResponseEntity<Void> {
         if (webHookCache.callbacksExists(clientRequest.callbacks)) {
             logger.info("Health check passed for callback: ${clientRequest.callbacks}")
-            ResponseEntity.ok().build()
+            return ResponseEntity.ok().build()
         } else {
             logger.info("Health check failed for callbacks: ${clientRequest.callbacks}")
-            ResponseEntity.notFound().build()
+            return ResponseEntity.notFound().build()
         }
+    }
 
 }
