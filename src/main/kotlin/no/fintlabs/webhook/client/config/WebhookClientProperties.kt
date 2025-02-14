@@ -11,4 +11,6 @@ import org.springframework.context.annotation.Configuration
 data class WebhookClientProperties(
     var server: String = "",
     var callbacks: Map<String, MutableList<String>> = mutableMapOf()
-)
+) {
+    fun getCallback(eventName: String) = callbacks.getOrDefault(eventName, mutableSetOf())
+}
